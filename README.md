@@ -130,3 +130,8 @@ If expensive resources in your project are left running for an extended period o
 
 `$ terraform apply "dev.tfplan"`
 
+### Start deployment on PROD
+
+`$ terraform plan -var-file="prod.tfvars" -out="prod.tfplan"`
+
+`$ terraform apply "prod.tfplan"`

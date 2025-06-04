@@ -8,9 +8,14 @@
 # Assumes a table call resources
 # resources schema - single column:  message:string
 import base64
+import json
 import functions_framework
 from google.cloud import bigquery
+from google.cloud.spanner_admin_instance_v1 import SpannerInstanceAdminClient
+
 table_id = "activities.resources"
+spanner_admin = SpannerInstanceAdminClient()
+
 
 # Triggered from a message on a Cloud Pub/Sub topic.
 @functions_framework.cloud_event
@@ -25,3 +30,25 @@ def pubsub_to_bigquery(cloud_event):
         print("Row Inserted")
     else:
         print(errors)
+    try:
+        message_data = json.loads(pubsub_message)
+        if is_new_spanner(message_data):
+            drop_spanner(message_data)
+    except json.JSONDecodeError as e:
+        print(f"Error decoding JSON from message: {e}")
+
+
+def is_new_spanner(message):
+    asset = message.get("asset")
+    prior_state = message.get("priorAssetState")
+    return asset & asset.get("assetType") == "spanner.googleapis.com/Instance" & prior_state == "DOES_NOT_EXIST"
+
+
+def drop_scanner(message):
+    try:
+        asset = message.get("asset")
+        asset_name = asset.get("name")
+        operation = spanner_admin.delete_instance(name=asset_name)
+        print(f"Spanner instance deletion initiated. Operation: {operation.operation.name}")
+    except Exception as e:
+        print(f"Error deleting Spanner instance: {e}")

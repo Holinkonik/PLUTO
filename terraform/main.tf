@@ -60,6 +60,12 @@ resource "google_project_service" "iam" {
   disable_on_destroy = false
 }
 
+resource "google_project_service" "spanner" {
+  project            = var.project_id
+  service            = "spanner.googleapis.com"
+  disable_on_destroy = false
+}
+
 # ------------------------------------------
 # IAM
 # Cloud Function Service Account
@@ -84,6 +90,12 @@ resource "google_project_iam_member" "cf_sa_pubsub_subscriber" {
 resource "google_project_iam_member" "cf_sa_logging_writer" {
   project = var.project_id
   role    = "roles/logging.logWriter"
+  member  = "serviceAccount:${google_service_account.cf_sa.email}"
+}
+
+resource "google_project_iam_member" "cf_sa_spanner_admin" {
+  project = var.project_id
+  role    = "roles/spanner.databaseAdmin"
   member  = "serviceAccount:${google_service_account.cf_sa.email}"
 }
 
@@ -231,6 +243,7 @@ resource "google_cloudfunctions2_function" "pluto_function_v2" {
     google_project_iam_member.cf_sa_bq_editor,
     google_project_iam_member.cf_sa_pubsub_subscriber,
     google_project_iam_member.cf_sa_logging_writer,
+    google_project_iam_member.cf_sa_spanner_admin,
     google_artifact_registry_repository_iam_member.cf_build_repo_writer
   ]
 }
@@ -254,8 +267,8 @@ resource "google_cloud_asset_project_feed" "activities_feed" {
   feed_id    = var.asset_feed_name
   content_type = "RESOURCE"
   asset_types = [
-    "compute.googleapis.com/.*"
-    # Add more types for future goals, e.g., "spanner.googleapis.com/Instance"
+    "compute.googleapis.com/.*",
+    "spanner.googleapis.com/Instance"
   ]
 
   feed_output_config {
