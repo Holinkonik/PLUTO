@@ -41,10 +41,10 @@ def pubsub_to_bigquery(cloud_event):
 def is_new_spanner(message):
     asset = message.get("asset")
     prior_state = message.get("priorAssetState")
-    return asset & asset.get("assetType") == "spanner.googleapis.com/Instance" & prior_state == "DOES_NOT_EXIST"
+    return asset and asset.get("assetType") == "spanner.googleapis.com/Instance" and prior_state == "DOES_NOT_EXIST"
 
 
-def drop_scanner(message):
+def drop_spanner(message):
     try:
         asset = message.get("asset")
         asset_name = asset.get("name")
