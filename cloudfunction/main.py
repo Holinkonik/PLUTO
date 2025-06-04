@@ -11,10 +11,10 @@ import base64
 import json
 import functions_framework
 from google.cloud import bigquery
-from google.cloud.spanner_admin_instance_v1 import SpannerInstanceAdminClient
+from google.cloud.spanner_admin_instance_v1 import InstanceAdminClient
 
 table_id = "activities.resources"
-spanner_admin = SpannerInstanceAdminClient()
+spanner_admin = InstanceAdminClient()
 
 
 # Triggered from a message on a Cloud Pub/Sub topic.
