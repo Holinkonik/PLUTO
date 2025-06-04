@@ -95,7 +95,7 @@ resource "google_project_iam_member" "cf_sa_logging_writer" {
 
 resource "google_project_iam_member" "cf_sa_spanner_admin" {
   project = var.project_id
-  role    = "roles/spanner.databaseAdmin"
+  role    = "roles/spanner.admin"
   member  = "serviceAccount:${google_service_account.cf_sa.email}"
 }
 
