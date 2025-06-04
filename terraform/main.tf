@@ -54,6 +54,12 @@ resource "google_project_service" "cloudbuild" {
   disable_on_destroy = false
 }
 
+resource "google_project_service" "iam" {
+  project            = var.project_id
+  service            = "iam.googleapis.com"
+  disable_on_destroy = false
+}
+
 # ------------------------------------------
 # IAM
 # Cloud Function Service Account
@@ -137,6 +143,7 @@ resource "google_bigquery_table" "resources_table" {
   project    = var.project_id
   dataset_id = google_bigquery_dataset.activities_dataset.dataset_id
   table_id   = "resources"
+  deletion_protection = false
   schema = jsonencode([
     {
       "name" : "messages",

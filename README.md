@@ -116,5 +116,17 @@ A github repository with sample code is located at **https://github.com/ROIGCP
 
 If expensive resources in your project are left running for an extended period of time OR if your project has excessive spend, your project will be disabled, and you will need to contact your [MoonbankSupport@roitraining.com](mailto:MoonbankSupport@roitraining.com) to have your project re-enabled.
 
+# Terraform Steps
 
+### Create workspaces for DEV & PROD
+
+`$ terraform workspace new dev`
+
+`$ terraform workspace new prod`
+
+### Start deployment on DEV
+
+`$ terraform plan -var-file="dev.tfvars" -out="dev.tfplan"`
+
+`$ terraform apply "dev.tfplan"`
 
