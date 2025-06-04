@@ -250,7 +250,12 @@ resource "google_cloud_asset_project_feed" "activities_feed" {
     "compute.googleapis.com/.*"
     # Add more types for future goals, e.g., "spanner.googleapis.com/Instance"
   ]
-  pubsub_topic = google_pubsub_topic.activities_topic.id
+
+  feed_output_config {
+    pubsub_destination {
+      topic = google_pubsub_topic.activities_topic.id
+    }
+  }
 
   condition {
     expression  = "true" # Optional: filter specific resources, e.g., resource.matchTag('123456789012/env', 'prod')"
