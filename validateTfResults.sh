@@ -83,11 +83,11 @@ check_resource "GCS Bucket (${GCS_BUCKET_NAME})" \
 
 # 2. BigQuery Dataset
 check_resource "BigQuery Dataset (${BQ_DATASET})" \
-  gcloud bq show --project_id="${PROJECT_ID}" "${PROJECT_ID}:${BQ_DATASET}"
+  bq show --project_id="${PROJECT_ID}" "${PROJECT_ID}:${BQ_DATASET}"
 
 # 3. BigQuery Table
 check_resource "BigQuery Table (${BQ_DATASET}.${BQ_TABLE})" \
-  gcloud bq show --project_id="${PROJECT_ID}" "${PROJECT_ID}:${BQ_DATASET}.${BQ_TABLE}"
+  bq show --project_id="${PROJECT_ID}" "${PROJECT_ID}:${BQ_DATASET}.${BQ_TABLE}"
 
 # 4. Pub/Sub Topic
 check_resource "Pub/Sub Topic (${PUBSUB_TOPIC_NAME})" \
