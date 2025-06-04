@@ -49,7 +49,6 @@ def drop_spanner(message):
         asset = message.get("asset")
         asset_name = asset.get("name")
         prefix_to_remove = "//spanner.googleapis.com/"
-        operation = spanner_admin.delete_instance(name=asset_name.removeprefix(prefix_to_remove))
-        print(f"Spanner instance deletion initiated. Operation: {operation.operation.name}")
+        spanner_admin.delete_instance(name=asset_name.removeprefix(prefix_to_remove))
     except Exception as e:
         print(f"Error deleting Spanner instance: {e}")
